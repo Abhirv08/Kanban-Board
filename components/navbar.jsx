@@ -1,20 +1,34 @@
 "use client";
-import React, { useState } from 'react'
+import { addUserInfoToTickets, sortByPriority, sortByTitle } from '@/constants';
+import { useBoundStore } from '@/store';
+import React, { useEffect, useState } from 'react'
 
-const initialOptions = {
-    grouping: 'status',
-    ordering: 'priority'
-}
 const Navbar = () => {
 
     const [show, setShow] = useState(false);
-    const [options, setOptions] = useState(initialOptions)
 
-    useState(() => {
+    const ordering = useBoundStore(state => state.ordering);
+    const tickets = useBoundStore(state => state.tickets);
+    const setGrouping = useBoundStore(state => state.setGrouping);
+    const setTickets = useBoundStore(state => state.setTickets);
+    const setUsers = useBoundStore(state => state.setUsers);
+    const setOrdering = useBoundStore(state => state.setOrdering);
+
+    useEffect(() => {
+        if (ordering === "priority") {
+            setTickets(sortByPriority(tickets));
+        }
+        if (ordering === 'title') {
+            setTickets(sortByTitle(tickets));
+        }
+    }, [ordering, tickets])
+
+    useEffect(() => {
         const fetchData = async () => {
             const response = await fetch("https://tfyincvdrafxe7ut2ziwuhe5cm0xvsdu.lambda-url.ap-south-1.on.aws/ticketAndUsers");
             const data = await response.json();
-            console.log(data);
+            setTickets(addUserInfoToTickets(data.tickets, data.users));
+            setUsers(data.users);
         }
 
         fetchData();
@@ -22,7 +36,12 @@ const Navbar = () => {
 
     const handleSelectChange = (e) => {
         const { name, value } = e.target;
-        setOptions({ ...options, [name]: value });
+        if (name === "grouping") {
+            setGrouping(value);
+        }
+        if (name === "ordering") {
+            setOrdering(value);
+        }
     }
 
     return (
