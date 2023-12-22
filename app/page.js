@@ -16,7 +16,6 @@ export default function Home() {
     } else if (grouping === "user") {
       return <DisplayByUser />
     }
-
     return <DisplayByPriority />
   }
 

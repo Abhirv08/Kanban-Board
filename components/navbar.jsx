@@ -1,27 +1,15 @@
 "use client";
-import { addUserInfoToTickets, sortByPriority, sortByTitle } from '@/constants';
+import { addUserInfoToTickets } from '@/constants';
 import { useBoundStore } from '@/store';
 import React, { useEffect, useState } from 'react'
 
 const Navbar = () => {
 
     const [show, setShow] = useState(false);
-
-    const ordering = useBoundStore(state => state.ordering);
-    const tickets = useBoundStore(state => state.tickets);
     const setGrouping = useBoundStore(state => state.setGrouping);
     const setTickets = useBoundStore(state => state.setTickets);
     const setUsers = useBoundStore(state => state.setUsers);
     const setOrdering = useBoundStore(state => state.setOrdering);
-
-    useEffect(() => {
-        if (ordering === "priority") {
-            setTickets(sortByPriority(tickets));
-        }
-        if (ordering === 'title') {
-            setTickets(sortByTitle(tickets));
-        }
-    }, [ordering, tickets])
 
     useEffect(() => {
         const fetchData = async () => {

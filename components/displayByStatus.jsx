@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PartByStatus from './partByStatus';
 import { useBoundStore } from '@/store';
+import { sortByPriority, sortByTitle } from '@/constants';
 
 const DisplayByStatus = () => {
     const [groupByStatus, setGroupByStatus] = useState({});
@@ -8,30 +9,39 @@ const DisplayByStatus = () => {
     const validStatus = ["Backlog", "Todo", "In progress", "Done", "Cancelled"];
 
     const tickets = useBoundStore(state => state.tickets);
+    const ordering = useBoundStore(state => state.ordering);
+
+    function groupTicketsByStatus(ticketsArr) {
+        const groupedTickets = {};
+
+        // Initialize the groupedTickets object with empty arrays for each valid status
+        validStatus.forEach((status) => {
+            groupedTickets[status] = [];
+        });
+
+        // Group tickets based on status
+        ticketsArr.forEach((ticket) => {
+            const ticketStatus = ticket.status;
+
+            if (groupedTickets.hasOwnProperty(ticketStatus)) {
+                groupedTickets[ticketStatus].push(ticket);
+            }
+        });
+
+        setGroupByStatus(groupedTickets);
+    }
 
     useEffect(() => {
-        function groupTicketsByStatus() {
-            const groupedTickets = {};
-
-            // Initialize the groupedTickets object with empty arrays for each valid status
-            validStatus.forEach((status) => {
-                groupedTickets[status] = [];
-            });
-
-            // Group tickets based on status
-            tickets.forEach((ticket) => {
-                const ticketStatus = ticket.status;
-
-                if (groupedTickets.hasOwnProperty(ticketStatus)) {
-                    groupedTickets[ticketStatus].push(ticket);
-                }
-            });
-
-            setGroupByStatus(groupedTickets);
+        if (ordering === "priority") {
+            groupTicketsByStatus(sortByPriority(tickets));
         }
+        if (ordering === 'title') {
+            groupTicketsByStatus(sortByTitle(tickets));
+        }
+    }, [ordering])
 
-        groupTicketsByStatus();
-
+    useEffect(() => {
+        groupTicketsByStatus(tickets);
     }, [tickets])
 
     return (

@@ -1,38 +1,49 @@
 import { useBoundStore } from '@/store'
 import React, { useEffect, useState } from 'react'
 import PartByUser from './partByUser';
+import { sortByPriority, sortByTitle } from '@/constants';
 
 const DisplayByUser = () => {
     const [userGroupedData, setUserGroupedData] = useState({});
 
     const users = useBoundStore(state => state.users);
     const tickets = useBoundStore(state => state.tickets);
+    const ordering = useBoundStore(state => state.ordering);
+
+    function groupTicketsByUser(ticketsArr, usersArr) {
+        const groupedTickets = {};
+
+        ticketsArr.forEach((ticket) => {
+            const userId = ticket.userId;
+
+            if (!groupedTickets[userId]) {
+                groupedTickets[userId] = [];
+            }
+
+            groupedTickets[userId].push(ticket);
+        });
+
+        const userNamedGrouping = {};
+
+        Object.keys(groupedTickets).forEach((userId) => {
+            const user = usersArr.find((user) => user.id === userId);
+            userNamedGrouping[user.name] = groupedTickets[userId];
+        })
+
+        setUserGroupedData(userNamedGrouping);
+    }
 
     useEffect(() => {
-        function groupTicketsByUserId() {
-            const groupedTickets = {};
-
-            tickets.forEach((ticket) => {
-                const userId = ticket.userId;
-
-                if (!groupedTickets[userId]) {
-                    groupedTickets[userId] = [];
-                }
-
-                groupedTickets[userId].push(ticket);
-            });
-
-            const userNamedGrouping = {};
-
-            Object.keys(groupedTickets).forEach((userId) => {
-                const user = users.find((user) => user.id === userId);
-                userNamedGrouping[user.name] = groupedTickets[userId];
-            })
-
-            setUserGroupedData(userNamedGrouping);
+        if (ordering === "priority") {
+            groupTicketsByUser(sortByPriority(tickets), users);
         }
+        if (ordering === 'title') {
+            groupTicketsByUser(sortByTitle(tickets), users);
+        }
+    }, [ordering])
 
-        groupTicketsByUserId();
+    useEffect(() => {
+        groupTicketsByUser(tickets, users);
     }, [tickets, users])
 
     return (

@@ -1,34 +1,45 @@
 import { useBoundStore } from '@/store'
 import React, { useEffect, useState } from 'react'
 import PartByPriority from './partByPriority';
+import { sortByPriority, sortByTitle } from '@/constants';
 
 const DisplayByPriority = () => {
     const [groupedData, setGroupedData] = useState({});
     const priorityLevels = ["No Priority", "Low", "Medium", "High", "Urgent"];
     const tickets = useBoundStore(state => state.tickets);
+    const ordering = useBoundStore(state => state.ordering);
 
-    useEffect(() => {
-        function groupTicketsByPriority() {
-            const groupedTickets = {};
+    function groupTicketsByPriority(TicketArr) {
+        const groupedTickets = {};
 
-            // Initialize the groupedTickets object with empty arrays for each priority level
-            for (let i = 0; i < 5; i++) {
-                groupedTickets[i] = [];
-            }
-
-            // Group tickets based on priority
-            tickets.forEach((ticket) => {
-                const ticketPriority = ticket.priority;
-
-                if (groupedTickets.hasOwnProperty(ticketPriority)) {
-                    groupedTickets[ticketPriority].push(ticket);
-                }
-            });
-
-            setGroupedData(groupedTickets);
+        // Initialize the groupedTickets object with empty arrays for each priority level
+        for (let i = 0; i < 5; i++) {
+            groupedTickets[i] = [];
         }
 
-        groupTicketsByPriority();
+        // Group tickets based on priority
+        TicketArr.forEach((ticket) => {
+            const ticketPriority = ticket.priority;
+
+            if (groupedTickets.hasOwnProperty(ticketPriority)) {
+                groupedTickets[ticketPriority].push(ticket);
+            }
+        });
+
+        setGroupedData(groupedTickets);
+    }
+
+    useEffect(() => {
+        if (ordering === "priority") {
+            groupTicketsByPriority(sortByPriority(tickets));
+        }
+        if (ordering === 'title') {
+            groupTicketsByPriority(sortByTitle(tickets));
+        }
+    }, [ordering])
+
+    useEffect(() => {
+        groupTicketsByPriority(tickets);
     }, [tickets])
 
     return (
