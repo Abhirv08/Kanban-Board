@@ -35,8 +35,6 @@ const DisplayByUser = () => {
         groupTicketsByUserId();
     }, [tickets, users])
 
-    console.log(Object.keys(userGroupedData))
-
     return (
         <div className='px-4 py-6 grid grid-cols-1 min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4'>
             {

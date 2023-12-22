@@ -1,5 +1,6 @@
 "use client";
 import Card from "@/components/card";
+import DisplayByPriority from "@/components/displayByPriority";
 import DisplayByStatus from "@/components/displayByStatus";
 import DisplayByUser from "@/components/displayByUser";
 import Navbar from "@/components/navbar";
@@ -15,6 +16,8 @@ export default function Home() {
     } else if (grouping === "user") {
       return <DisplayByUser />
     }
+
+    return <DisplayByPriority />
   }
 
   return (
