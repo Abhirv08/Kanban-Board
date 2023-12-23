@@ -2,9 +2,13 @@ import { create } from 'zustand'
 
 export const useBoundStore = create((set) => {
 
-    // Read initial values from local storage if available, otherwise use defaults
-    const initialGrouping = localStorage.getItem('grouping') || 'status';
-    const initialOrdering = localStorage.getItem('ordering') || 'priority';
+    let initialGrouping = 'status';
+    let initialOrdering = 'priority';
+
+    if (typeof window !== undefined) {
+        initialGrouping = localStorage.getItem('grouping');
+        initialOrdering = localStorage.getItem('ordering');
+    }
 
     return {
         ordering: initialOrdering,

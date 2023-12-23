@@ -4,10 +4,9 @@ import { useBoundStore } from '@/store';
 import React, { useEffect, useState } from 'react'
 
 const Navbar = () => {
-
-    const [show, setShow] = useState(false);
     const grouping = useBoundStore(state => state.grouping);
     const ordering = useBoundStore(state => state.ordering);
+    const [show, setShow] = useState(false);
     const setGrouping = useBoundStore(state => state.setGrouping);
     const setTickets = useBoundStore(state => state.setTickets);
     const setUsers = useBoundStore(state => state.setUsers);
@@ -20,8 +19,8 @@ const Navbar = () => {
             setTickets(addUserInfoToTickets(data.tickets, data.users));
             setUsers(data.users);
         }
-
         fetchData();
+
     }, [setTickets, setUsers])
 
     const handleSelectChange = (e) => {
