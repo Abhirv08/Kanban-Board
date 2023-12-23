@@ -36,7 +36,7 @@ const DisplayByPriority = () => {
         if (ordering === 'title') {
             groupTicketsByPriority(sortByTitle(tickets));
         }
-    }, [ordering])
+    }, [ordering, tickets])
 
     useEffect(() => {
         groupTicketsByPriority(tickets);

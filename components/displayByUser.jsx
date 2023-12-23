@@ -40,7 +40,7 @@ const DisplayByUser = () => {
         if (ordering === 'title') {
             groupTicketsByUser(sortByTitle(tickets), users);
         }
-    }, [ordering])
+    }, [ordering, tickets, users])
 
     useEffect(() => {
         groupTicketsByUser(tickets, users);

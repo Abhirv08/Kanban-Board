@@ -20,7 +20,7 @@ const Navbar = () => {
         }
 
         fetchData();
-    }, [])
+    }, [setTickets, setUsers])
 
     const handleSelectChange = (e) => {
         const { name, value } = e.target;
