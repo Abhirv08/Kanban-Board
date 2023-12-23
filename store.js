@@ -1,34 +1,37 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
 
 export const useBoundStore = create((set) => {
+    // Check if localStorage is available
+    const isLocalStorageAvailable = typeof window !== 'undefined';
 
-    let initialGrouping = 'status';
-    let initialOrdering = 'priority';
-
-    if (typeof window !== undefined) {
-        initialGrouping = localStorage.getItem('grouping');
-        initialOrdering = localStorage.getItem('ordering');
-    }
+    // Read initial values from local storage if available, otherwise use defaults
+    const initialGrouping = isLocalStorageAvailable ? localStorage.getItem('grouping') || 'status' : 'status';
+    const initialOrdering = isLocalStorageAvailable ? localStorage.getItem('ordering') || 'priority' : 'priority';
 
     return {
         ordering: initialOrdering,
         setOrdering: (order) => {
-            set(() => {
-                localStorage.setItem('ordering', order);
+            set((state) => {
+                // Update local storage if available
+                if (isLocalStorageAvailable) {
+                    localStorage.setItem('ordering', order);
+                }
                 return { ordering: order };
             });
         },
         grouping: initialGrouping,
         setGrouping: (group) => {
-            set(() => {
-                localStorage.setItem('grouping', group);
+            set((state) => {
+                // Update local storage if available
+                if (isLocalStorageAvailable) {
+                    localStorage.setItem('grouping', group);
+                }
                 return { grouping: group };
             });
         },
         tickets: [],
-        setTickets: (data) => set(() => ({ tickets: data })),
+        setTickets: (data) => set((state) => ({ tickets: data })),
         users: [],
-        setUsers: (data) => set(() => ({ users: data })),
+        setUsers: (data) => set((state) => ({ users: data })),
     };
 });
-
