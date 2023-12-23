@@ -11,7 +11,7 @@ Step 3. Move to Kanban-Board directory. <br/>
 cd Kanban-Board
 ```
 
-step 4. Install the dependencies. <br/>
+Step 4. Install the dependencies. <br/>
 
 ```bash
 npm install
@@ -21,12 +21,6 @@ Step 5. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
