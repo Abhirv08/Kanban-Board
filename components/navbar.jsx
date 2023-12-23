@@ -6,6 +6,8 @@ import React, { useEffect, useState } from 'react'
 const Navbar = () => {
 
     const [show, setShow] = useState(false);
+    const grouping = useBoundStore(state => state.grouping);
+    const ordering = useBoundStore(state => state.ordering);
     const setGrouping = useBoundStore(state => state.setGrouping);
     const setTickets = useBoundStore(state => state.setTickets);
     const setUsers = useBoundStore(state => state.setUsers);
@@ -51,14 +53,14 @@ const Navbar = () => {
                 opacity: !show ? 0 : 1,
             }} className="absolute bg-white shadow-[0_0_8px_0_#0000001a] z-40 py-2 px-4 -bottom-24 rounded-md flex flex-col gap-4 ">
                 <div className="flex gap-12"><span>Grouping</span>
-                    <select name="grouping" id="grouping" onClick={handleSelectChange} className='w-24 focus:outline-none border-2 border-gray-300 p-0.5 rounded-md'>
+                    <select name="grouping" id="grouping" onChange={handleSelectChange} className='w-24 focus:outline-none border-2 border-gray-300 p-0.5 rounded-md' defaultValue={grouping} >
                         <option value="status">Status</option>
                         <option value="user">User</option>
                         <option value="priority">Priority</option>
                     </select>
                 </div>
                 <div className="flex gap-12"><span>Ordering</span>
-                    <select name="ordering" id="ordering" onClick={handleSelectChange} className='w-24 focus:outline-none border-2 border-gray-300 p-0.5 rounded-md'>
+                    <select name="ordering" id="ordering" onChange={handleSelectChange} className='w-24 focus:outline-none border-2 border-gray-300 p-0.5 rounded-md' defaultValue={ordering} >
                         <option value="priority">Priority</option>
                         <option value="title">Title</option>
                     </select>
